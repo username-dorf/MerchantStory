@@ -1,3 +1,4 @@
+using Core.AssetProvider;
 using Core.SceneManager;
 using Core.StateMachine;
 using Zenject;
@@ -10,6 +11,7 @@ namespace Core
         {
             SceneManagerInstaller.Install(Container);
             StateMachineInstaller.Install(Container);
+            AssetProviderInstaller.Install(Container);
             
             BindBootstrap(Container);
         }
