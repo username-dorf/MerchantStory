@@ -1,6 +1,8 @@
 {
   "dependencies": {
     "com.cysharp.unitask": "2.5.5",
+    "com.dbrizov.naughtyattributes": "2.1.4",
+    "com.neuecc.unirx": "7.1.0",
     "com.svermeulen.extenject": "9.2.0-stcf3",
     "com.unity.collab-proxy": "2.4.4",
     "com.unity.feature.2d": "2.0.1",
@@ -51,7 +53,9 @@
       "url": "https://package.openupm.com",
       "scopes": [
         "com.cysharp.unitask",
-        "com.svermeulen.extenject"
+        "com.svermeulen.extenject",
+        "com.neuecc.unirx",
+        "com.dbrizov.naughtyattributes"
       ]
     }
   ]
