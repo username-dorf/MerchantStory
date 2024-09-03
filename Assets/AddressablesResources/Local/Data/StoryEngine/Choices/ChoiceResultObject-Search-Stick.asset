@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a52993d236904b89b58c995af575299e, type: 3}
+  m_Name: ChoiceResultObject-Search-Stick
+  m_EditorClassIdentifier: 
+  <Description>k__BackingField: you found {0} x{1}
+  <ResultsChoice>k__BackingField: {fileID: 0}
+  <Chance>k__BackingField: 0.3
+  <OutputResource>k__BackingField:
+    <ItemObject>k__BackingField: {fileID: 11400000, guid: 8f071d166c663491b98266684dcb5e37, type: 2}
+    <Amount>k__BackingField: 2

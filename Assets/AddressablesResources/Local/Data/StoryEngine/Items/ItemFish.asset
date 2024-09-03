@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4027aeaaaac4d15bc7409b74d3b15f0, type: 3}
+  m_Name: ItemFish
+  m_EditorClassIdentifier: 
+  <ID>k__BackingField: item-fish
+  <Name>k__BackingField: Fish
+  <Icon>k__BackingField:
+    m_AssetGUID: 971cebe279d524534bc5a696c34110ed
+    m_SubObjectName: Gear_0
+    m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    m_EditorAssetChanged: 1
