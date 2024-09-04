@@ -17,18 +17,11 @@ namespace Core.StateMachine
         }
         public async UniTask EnterAsync(CancellationToken cancellationToken)
         {
-            Debug.Log("Start entering BootstrapState");
-            await _assetProvider.LoadAsset<Sprite>("Cart",default);
             await _stateMachine.ChangeStateAsync<LobbyState>(false);
-            Debug.Log("End entering BootstrapState");
         }
 
         public async UniTask ExitAsync(CancellationToken cancellationToken)
         {
-            Debug.Log("Start exiting BootstrapState");
-            await UniTask.Delay(1000);
-            _assetProvider.Release("!");
-            Debug.Log("End exiting BootstrapState");
         }
     }
 }

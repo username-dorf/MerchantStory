@@ -1,13 +1,11 @@
 {
-    "name": "MerchantStory.Core",
+    "name": "MerchantStory.AssetProvider",
     "rootNamespace": "",
     "references": [
         "GUID:0d8beb7f090555447a6cf5ce9e54dbb4",
         "GUID:f51ebe6a0ceec4240a699833d6309b23",
         "GUID:9e24947de15b9834991c9d8411ea37cf",
-        "GUID:84651a3751eca9349aac36a66bba901b",
-        "GUID:db4cee5b10aa94d3f96d93f1103af05f",
-        "GUID:cf181d8cd20b34104b286f65bd9066e3"
+        "GUID:84651a3751eca9349aac36a66bba901b"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

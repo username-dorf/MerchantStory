@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Gameplay.Runtime.StoryEngine
+namespace Gameplay.StoryEngine
 {
     [CreateAssetMenu(fileName = "SituationContext", menuName = "Scriptable Objects/StoryEngine/SituationContext")]
     public class SituationContextObject : ScriptableObject

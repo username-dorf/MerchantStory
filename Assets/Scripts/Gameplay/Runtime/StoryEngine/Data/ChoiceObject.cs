@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Gameplay.Runtime.StoryEngine
+namespace Gameplay.StoryEngine
 {
     public abstract class ChoiceObject : ScriptableObject
     {

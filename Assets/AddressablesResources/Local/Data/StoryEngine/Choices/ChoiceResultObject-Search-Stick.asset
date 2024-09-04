@@ -16,5 +16,9 @@ MonoBehaviour:
   <ResultsChoice>k__BackingField: {fileID: 0}
   <Chance>k__BackingField: 0.3
   <OutputResource>k__BackingField:
-    <ItemObject>k__BackingField: {fileID: 11400000, guid: 8f071d166c663491b98266684dcb5e37, type: 2}
+    <ItemObject>k__BackingField:
+      m_AssetGUID: 8f071d166c663491b98266684dcb5e37
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
     <Amount>k__BackingField: 2

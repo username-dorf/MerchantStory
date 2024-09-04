@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: StoryEngine-SituationContexts
+  m_EditorClassIdentifier: 
+  m_GroupName: StoryEngine-SituationContexts
+  m_Data:
+    m_SerializedData: []
+  m_GUID: c73a89724f5fa489a9c2d6a3a7c7957b
+  m_SerializeEntries:
+  - m_GUID: 44d8defb8886a456996a7cc7d70ed38c
+    m_Address: Assets/AddressablesResources/Local/Data/StoryEngine/SituationContexts/SituationContext-OldOak.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SE
+    - SE-SituationContext
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b57f50e4c58f949d893c1cc4218b20d3
+    m_Address: Assets/AddressablesResources/Local/Data/StoryEngine/SituationContexts/SituationContext-RottenStump.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SE
+    - SE-SituationContext
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e87340fbddaf14994b433346fe2a4853
+    m_Address: Assets/AddressablesResources/Local/Data/StoryEngine/SituationContexts/SituationContext-SmallForestLake.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SE
+    - SE-SituationContext
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 396f8fcd42b464c83bf0908730ae95b9, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 7777556d5b8cd499d814c7ad9ee24fb7, type: 2}
+    - {fileID: 11400000, guid: bf89fef5d3eea4620a3ad870d5dafeaa, type: 2}

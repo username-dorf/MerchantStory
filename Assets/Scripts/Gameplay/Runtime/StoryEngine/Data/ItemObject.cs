@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-namespace Gameplay.Runtime.StoryEngine
+namespace Gameplay.StoryEngine
 {
     [CreateAssetMenu(fileName = "Item", menuName = "Scriptable Objects/StoryEngine/Item")]
 

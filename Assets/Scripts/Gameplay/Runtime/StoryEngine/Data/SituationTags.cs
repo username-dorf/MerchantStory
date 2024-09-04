@@ -1,4 +1,4 @@
-namespace Gameplay.Runtime.StoryEngine
+namespace Gameplay.StoryEngine
 {
     public class SituationTags
     {
