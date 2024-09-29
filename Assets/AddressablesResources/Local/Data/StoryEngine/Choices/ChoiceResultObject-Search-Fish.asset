@@ -13,12 +13,6 @@ MonoBehaviour:
   m_Name: ChoiceResultObject-Search-Fish
   m_EditorClassIdentifier: 
   <Description>k__BackingField: you found {0} x{1}
-  <ResultsChoice>k__BackingField: {fileID: 0}
-  <Chance>k__BackingField: 0.3
-  <OutputResource>k__BackingField:
-    <ItemObject>k__BackingField:
-      m_AssetGUID: 56dfa9c92d1734c5b807c901f71f2dc8
-      m_SubObjectName: 
-      m_SubObjectType: 
-      m_EditorAssetChanged: 0
+  <Output>k__BackingField:
+  - <ID>k__BackingField: fish
     <Amount>k__BackingField: 1

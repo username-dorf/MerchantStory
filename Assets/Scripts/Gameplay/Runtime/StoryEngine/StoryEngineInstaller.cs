@@ -1,3 +1,4 @@
+using Gameplay.StoryEngine.Constructor;
 using Gameplay.StoryEngine.Core;
 using Zenject;
 
@@ -7,7 +8,22 @@ namespace Gameplay.StoryEngine
     {
         public override void InstallBindings()
         {
-            CoreInstaller.Install(Container);
+            ChoiceStrategiesInstaller.Install(Container);
+            
+            Container.BindInterfacesTo<SituationsResourcesController>()
+                .AsSingle();
+            
+            
+            Container.BindFactory<SituationObject, SituationModel,SituationModel.Factory>()
+                .AsSingle();
+            Container.BindFactory<ChoiceObject,ChoiceModel,ChoiceModel.Factory>()
+                .AsSingle();
+            
+            
+            Container.Bind<ChoiceCommandStrategyFactory>()
+                .AsSingle();
+            Container.Bind<SituationsQueueFactory>()
+                .AsSingle();        
         }
     }
 }

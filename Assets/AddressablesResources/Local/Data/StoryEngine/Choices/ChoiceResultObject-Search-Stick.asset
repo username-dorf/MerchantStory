@@ -13,12 +13,6 @@ MonoBehaviour:
   m_Name: ChoiceResultObject-Search-Stick
   m_EditorClassIdentifier: 
   <Description>k__BackingField: you found {0} x{1}
-  <ResultsChoice>k__BackingField: {fileID: 0}
-  <Chance>k__BackingField: 0.3
-  <OutputResource>k__BackingField:
-    <ItemObject>k__BackingField:
-      m_AssetGUID: 8f071d166c663491b98266684dcb5e37
-      m_SubObjectName: 
-      m_SubObjectType: 
-      m_EditorAssetChanged: 0
+  <Output>k__BackingField:
+  - <ID>k__BackingField: stick
     <Amount>k__BackingField: 2

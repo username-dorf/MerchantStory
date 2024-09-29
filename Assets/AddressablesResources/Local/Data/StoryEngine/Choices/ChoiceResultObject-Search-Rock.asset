@@ -13,12 +13,6 @@ MonoBehaviour:
   m_Name: ChoiceResultObject-Search-Rock
   m_EditorClassIdentifier: 
   <Description>k__BackingField: you found {0} x{1}
-  <ResultsChoice>k__BackingField: {fileID: 0}
-  <Chance>k__BackingField: 0.3
-  <OutputResource>k__BackingField:
-    <ItemObject>k__BackingField:
-      m_AssetGUID: d008e4e617f454f359c07aaad8e550fb
-      m_SubObjectName: 
-      m_SubObjectType: 
-      m_EditorAssetChanged: 0
+  <Output>k__BackingField:
+  - <ID>k__BackingField: rock
     <Amount>k__BackingField: 1
