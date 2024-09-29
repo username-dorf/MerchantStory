@@ -1,9 +1,7 @@
 using System.Collections.Generic;
-using Core.Database;
-using Core.Storage;
 using UniRx;
 
-namespace Core.Runtime.Storage
+namespace Core.Storage
 {
     public interface IStorageReceiver
     {

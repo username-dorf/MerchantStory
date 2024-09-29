@@ -1,5 +1,3 @@
-using Core.Runtime.Storage;
-using Core.Storage.Receiver;
 using Zenject;
 
 namespace Core.Storage
@@ -9,7 +7,11 @@ namespace Core.Storage
         public override void InstallBindings()
         {
             ReceiveStrategiesInstaller.Install(Container);
+            SpendStrategiesInstaller.Install(Container);
+            
             Container.BindInterfacesTo<StorageReceiver>()
+                .AsSingle();
+            Container.BindInterfacesTo<StorageSpender>()
                 .AsSingle();
         }
     }

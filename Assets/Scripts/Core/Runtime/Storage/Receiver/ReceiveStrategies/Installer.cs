@@ -1,6 +1,6 @@
 using Zenject;
 
-namespace Core.Storage.Receiver
+namespace Core.Storage
 {
     public class ReceiveStrategiesInstaller : Installer<ReceiveStrategiesInstaller>
     {

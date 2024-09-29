@@ -1,7 +1,6 @@
 using System.Threading;
 using Core.AssetProvider;
 using Core.Database;
-using Core.Runtime.Storage;
 using Core.SceneManager;
 using Core.Storage;
 using Cysharp.Threading.Tasks;
@@ -16,13 +15,16 @@ namespace Core.StateMachine
         private IAssetProvider _assetProvider;
         private SituationsQueueFactory _situationsQueueFactory;
         private IStorageReceiver _storageReceiver;
+        private IStorageSpender _storageSpender;
 
         public LobbyState(
             ISceneManager sceneManager,
             IAssetProvider assetProvider,
             SituationsQueueFactory situationsQueueFactory,
-            IStorageReceiver storageReceiver)
+            IStorageReceiver storageReceiver,
+            IStorageSpender storageSpender)
         {
+            _storageSpender = storageSpender;
             _storageReceiver = storageReceiver;
             _situationsQueueFactory = situationsQueueFactory;
             _assetProvider = assetProvider;
@@ -31,7 +33,7 @@ namespace Core.StateMachine
         public async UniTask EnterAsync(CancellationToken cancellationToken)
         {
             //var situationsQueue = await _situationsQueueFactory.Create(cancellationToken);
-            //_storageReceiver.Receive(new AmountableItem("coin",-190));
+            //_storageSpender.TrySpend(new AmountableItem("coin",500));
             await _sceneManager.LoadSceneAsync("LobbyScene");
         }
 

@@ -7,7 +7,7 @@ namespace Core.Storage
 {
     public interface IAmountableItem : IItem
     {
-        public int Amount { get; }
+        public uint Amount { get; }
     }
 
     [Serializable]
@@ -18,9 +18,9 @@ namespace Core.Storage
         [field: SerializeField]
         public string ID { get; private set; }
 
-        [JsonProperty] [field: SerializeField] public int Amount { get; private set; }
+        [JsonProperty] [field: SerializeField] public uint Amount { get; private set; }
 
-        public AmountableItem(string id, int amount)
+        public AmountableItem(string id, uint amount)
         {
             ID = id;
             Amount = amount;
