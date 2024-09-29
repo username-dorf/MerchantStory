@@ -1,5 +1,6 @@
 using Core.AssetProvider;
 using Core.Database;
+using Core.Input;
 using Core.SceneManager;
 using Core.StateMachine;
 using Core.Storage;
@@ -12,6 +13,7 @@ namespace Core
     {
         public override void InstallBindings()
         {
+            UserInputInstaller.Install(Container);
             DatabaseInstaller.Install(Container);
             SceneManagerInstaller.Install(Container);
             StateMachineInstaller.Install(Container);
