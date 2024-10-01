@@ -16,23 +16,15 @@ namespace Core.Input
 
         private void BindInputStrategy()
         {
-            Container.Bind<KeyboardInputStrategy>().AsSingle();
-            Debug.Log("Keyboard input strategy bound");
-
-            var touchSupported = UnityEngine.InputSystem.Touchscreen.current != null;
-            var mouseSupported = UnityEngine.InputSystem.Mouse.current != null;
-            if (touchSupported)
-            {
-                Container.Bind<DeviceInputStrategy>().To<TouchInputStrategy>()
-                    .AsSingle();
-                Debug.Log("Touch input strategy bound");
-            }
-            else
-            {
-                Container.Bind<DeviceInputStrategy>().To<MouseInputStrategy>()
-                    .AsSingle();
-                Debug.Log("Mouse input strategy bound");
-            }
+            Container.Bind<DeviceInputStrategy>()
+                .To<KeyboardInputStrategy>()
+                .AsCached();
+            Container.Bind<DeviceInputStrategy>()
+                .To<TouchInputStrategy>()
+                .AsCached();
+            Container.Bind<DeviceInputStrategy>()
+                .To<MouseInputStrategy>()
+                .AsCached();
         }
     }
 }

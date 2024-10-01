@@ -38,7 +38,7 @@ namespace Core.StateMachine
         {
             //var situationsQueue = await _situationsQueueFactory.Create(cancellationToken);
             //_storageSpender.TrySpend(new AmountableItem("coin",500));
-            //_userInputListener.SetListening(true);
+            _userInputListener.SetListening(true);
             await _sceneManager.LoadSceneAsync("LobbyScene");
         }
 

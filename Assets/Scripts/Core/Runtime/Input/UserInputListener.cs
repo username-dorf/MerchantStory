@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UniRx;
 using Zenject;
 
@@ -9,37 +11,53 @@ namespace Core.Input
         ReadOnlyReactiveProperty<bool> IsListening { get; }
         void SetListening(bool isListening);
 
-        ReactiveCommand<Direction> OnSwipeRegistered { get; }
-        ReactiveCommand<SwipeProgress> OnSwipeProgressChanged { get; }
+        IObservable<Direction> OnSwipeRegistered { get; }
+        IObservable<SwipeProgress> OnSwipeProgressChanged { get; }
     }
 
     public class UserInputListener : IUserInputListener, IInitializable, IDisposable
     {
-        public ReactiveCommand<Direction> OnSwipeRegistered => _deviceInputStrategy.OnSwipeRegistered;
-        public ReactiveCommand<SwipeProgress> OnSwipeProgressChanged => _deviceInputStrategy.OnSwipeProgressChanged;
+        public IObservable<Direction> OnSwipeRegistered
+        {
+            get
+            {
+                return _deviceInputStrategies
+                    .Select(strategy => strategy.OnSwipeRegistered)
+                    .Merge();
+            }
+        }
+        
+        public IObservable<SwipeProgress> OnSwipeProgressChanged
+        {
+            get
+            {
+                return _deviceInputStrategies
+                    .Select(strategy => strategy.OnSwipeProgressChanged)
+                    .Merge();
+            }
+        }
 
         public ReadOnlyReactiveProperty<bool> IsListening => _isListening.ToReadOnlyReactiveProperty();
 
 
         private ReactiveProperty<bool> _isListening;
         private CompositeDisposable _disposable;
-        private DeviceInputStrategy _deviceInputStrategy;
-        private KeyboardInputStrategy _keyboardInputStrategy;
+        private List<DeviceInputStrategy> _deviceInputStrategies;
 
         public UserInputListener(
-            KeyboardInputStrategy keyboardInputStrategy,
-            DeviceInputStrategy deviceInputStrategy)
+            List<DeviceInputStrategy> deviceInputStrategies)
         {
-            _keyboardInputStrategy = keyboardInputStrategy;
-            _deviceInputStrategy = deviceInputStrategy;
+            _deviceInputStrategies = deviceInputStrategies;
             _isListening = new ReactiveProperty<bool>(false);
             _disposable = new CompositeDisposable();
         }
 
         public void Initialize()
         {
-            _deviceInputStrategy.Initialize();
-            _keyboardInputStrategy.Initialize();
+            foreach (var deviceInputStrategy in _deviceInputStrategies)
+            {
+                deviceInputStrategy.Initialize();
+            }
             _isListening
                 .Subscribe(OnListeningChanged)
                 .AddTo(_disposable);
@@ -54,13 +72,17 @@ namespace Core.Input
         {
             if (isListening)
             {
-                _deviceInputStrategy.InputAction.Enable();
-                _keyboardInputStrategy.InputAction.Enable();
+                foreach (var deviceInputStrategy in _deviceInputStrategies)
+                {
+                    deviceInputStrategy.InputAction.Enable();
+                }
             }
             else
             {
-                _deviceInputStrategy.InputAction.Disable();
-                _keyboardInputStrategy.InputAction.Disable();
+                foreach (var deviceInputStrategy in _deviceInputStrategies)
+                {
+                    deviceInputStrategy.InputAction.Disable();
+                }
             }
         }
 
