@@ -2,6 +2,7 @@
   "dependencies": {
     "com.cysharp.unitask": "2.5.5",
     "com.dbrizov.naughtyattributes": "2.1.4",
+    "com.kyrylokuzyk.primetween": "file:../Assets/Packages/com.kyrylokuzyk.primetween.tgz",
     "com.neuecc.unirx": "7.1.0",
     "com.svermeulen.extenject": "9.2.0-stcf3",
     "com.unity.addressables.android": "1.0.4",
