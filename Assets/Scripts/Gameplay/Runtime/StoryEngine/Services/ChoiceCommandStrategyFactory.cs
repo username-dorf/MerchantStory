@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Gameplay.StoryEngine.Constructor;
 using UniRx;
@@ -7,19 +8,19 @@ namespace Gameplay.StoryEngine
     public interface IChoiceCommandStrategy
     {
         bool IsApplicable(ChoiceObject choiceObject);
-        ReactiveCommand Create(ChoiceObject choiceObject);
+        Action Create(ChoiceObject choiceObject);
     }
 
     public interface IChoiceCommandStrategy<T> : IChoiceCommandStrategy where T : ChoiceObject
     {
-        ReactiveCommand Create(T choiceObject);
+        Action Create(T choiceObject);
 
         bool IChoiceCommandStrategy.IsApplicable(ChoiceObject choiceObject)
         {
             return choiceObject is T;
         }
 
-        ReactiveCommand IChoiceCommandStrategy.Create(ChoiceObject choiceObject)
+        Action IChoiceCommandStrategy.Create(ChoiceObject choiceObject)
         {
             return Create((T) choiceObject);
         }
@@ -34,7 +35,7 @@ namespace Gameplay.StoryEngine
             _strategies = strategies;
         }
 
-        public ReactiveCommand Create(ChoiceObject choiceObject)
+        public Action Create(ChoiceObject choiceObject)
         {
             foreach (var choiceCommandStrategy in _strategies)
             {

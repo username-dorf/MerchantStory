@@ -1,4 +1,5 @@
 using Core.Database;
+using UnityEngine;
 using Zenject;
 
 namespace Core.Storage
@@ -31,6 +32,8 @@ namespace Core.Storage
                 var newValue = currentValue.Amount + item.Amount;
                 _repository.Update(new AmountableItem(item.ID, newValue));
             }
+
+            Debug.Log($"Received item {item.ID} with amount {item.Amount}");
         }
     }
 }

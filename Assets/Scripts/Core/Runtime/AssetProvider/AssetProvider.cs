@@ -4,6 +4,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Core.AssetProvider
 {
@@ -219,6 +220,92 @@ namespace Core.AssetProvider
             {
                 Addressables.Release(handle);
                 throw;
+            }
+        }
+        /// <summary>
+        /// Resolves an IRequestAssets and loads all requested assets.
+        /// Returns a disposable that releases the assets on Dispose.
+        /// </summary>
+        /// <param name="request">The IRequestAssets that specifies the assets to load</param>
+        /// <returns>A disposable handle that releases the assets when disposed</returns>
+        public async UniTask<IDisposable> ResolveRequest(IRequestAssets request, CancellationToken cancellationToken)
+        {
+            Dictionary<Type, string> requestedAssets = request.RequestAssets();
+            var loadedAssetHandles = new List<AsyncOperationHandle>();
+
+            try
+            {
+                foreach (var assetRequest in requestedAssets)
+                {
+                    var assetType = assetRequest.Key;
+                    var addressablePath = assetRequest.Value;
+
+                    var loadMethod = typeof(Addressables)
+                        .GetMethod("LoadAssetAsync", new[] { typeof(string) })
+                        .MakeGenericMethod(typeof(GameObject));
+                    var handle = (AsyncOperationHandle<GameObject>)loadMethod.Invoke(null, new object[] { addressablePath });
+
+                    await handle.ToUniTask(cancellationToken: cancellationToken);
+                    
+                    if (handle.Result == null)
+                    {
+                        throw new Exception($"No GameObject found for the addressable path: {addressablePath}");
+                    }
+
+                    var component = handle.Result.GetComponent(assetType);
+
+                    if (component == null)
+                    {
+                        throw new Exception($"The GameObject at path {addressablePath} does not have a component of type {assetType}.");
+                    }
+
+                    _loadedAssets[(null, addressablePath)] = component;
+                    loadedAssetHandles.Add(handle);
+                }
+            }
+            catch (Exception e)
+            {
+                foreach (var handle in loadedAssetHandles)
+                {
+                    Addressables.Release(handle);
+                }
+                throw;
+            }
+
+            return new RequestHandle(loadedAssetHandles, this);
+        }
+        
+        private class RequestHandle : IDisposable
+        {
+            private readonly List<AsyncOperationHandle> _handles;
+            private readonly AssetProvider _assetProvider;
+
+            public RequestHandle(List<AsyncOperationHandle> handles, AssetProvider assetProvider)
+            {
+                _handles = handles;
+                _assetProvider = assetProvider;
+            }
+
+            public void Dispose()
+            {
+                foreach (var handle in _handles)
+                {
+                    _assetProvider.Release(handle.Result);
+                }
+            }
+        }
+
+        // The Release method should accept an object for release
+        public void Release(object asset)
+        {
+            foreach (var kvp in _loadedAssets)
+            {
+                if (kvp.Value == asset)
+                {
+                    Addressables.Release(asset);
+                    _loadedAssets.Remove(kvp.Key);
+                    break;
+                }
             }
         }
 

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66f9d27cbd754054ac8990bf20886851, type: 3}
   m_Name: SituationContext-RottenStump
   m_EditorClassIdentifier: 
-  <Chance>k__BackingField: 0.2
+  <Chance>k__BackingField: 0.1
   <Description>k__BackingField: rotten stump
   <Choices>k__BackingField:
   - {fileID: 11400000, guid: 1a8cdd54e234c4295bdcc8e3b7f3ba09, type: 2}

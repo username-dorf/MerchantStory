@@ -18,7 +18,7 @@ MonoBehaviour:
   m_GUID: d1011decb434b41e18eca98101ed7068
   m_SerializeEntries:
   - m_GUID: d3f4813668f214ee8b9926a0ac4f0d5d
-    m_Address: LobbyScene
+    m_Address: AdventureModeScene
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

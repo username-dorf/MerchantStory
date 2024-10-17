@@ -23,7 +23,12 @@ namespace Gameplay.StoryEngine
             Container.Bind<ChoiceCommandStrategyFactory>()
                 .AsSingle();
             Container.Bind<SituationsQueueFactory>()
-                .AsSingle();        
+                .AsSingle();   
+            Container.Bind<SituationQueueProcessor>()
+                .AsSingle();
+
+            Container.BindInterfacesTo<UISituationModel>()
+                .AsSingle();
         }
     }
 }

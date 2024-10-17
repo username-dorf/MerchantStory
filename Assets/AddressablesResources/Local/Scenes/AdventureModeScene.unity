@@ -128,6 +128,7 @@ GameObject:
   m_Component:
   - component: {fileID: 26088614}
   - component: {fileID: 26088613}
+  - component: {fileID: 26088615}
   m_Layer: 0
   m_Name: SceneContext
   m_TagString: Untagged
@@ -148,7 +149,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _scriptableObjectInstallers: []
-  _monoInstallers: []
+  _monoInstallers:
+  - {fileID: 26088615}
   _installerPrefabs: []
   _autoRun: 1
   OnPreInstall:
@@ -181,6 +183,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &26088615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 26088612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52ccc8a5ed47430080c5fefa569be6fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hudView: {fileID: 35887286}
 --- !u!1 &35887281
 GameObject:
   m_ObjectHideFlags: 0
@@ -193,6 +208,7 @@ GameObject:
   - component: {fileID: 35887284}
   - component: {fileID: 35887283}
   - component: {fileID: 35887282}
+  - component: {fileID: 35887286}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -283,6 +299,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &35887286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 35887281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e1070749dba49c492726df7b7d68dd2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Header>k__BackingField: {fileID: 941742806}
+  <Body>k__BackingField: {fileID: 437435857}
+  <Footer>k__BackingField: {fileID: 1136698554}
 --- !u!1 &437435856
 GameObject:
   m_ObjectHideFlags: 0
@@ -824,6 +855,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SituationView
       objectReference: {fileID: 0}
+    - target: {fileID: 402207267254943639, guid: d996788de322f4e0892660ceb0e5873f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1242952312399433321, guid: d996788de322f4e0892660ceb0e5873f, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -923,6 +958,10 @@ PrefabInstance:
     - target: {fileID: 2568797989096368451, guid: d996788de322f4e0892660ceb0e5873f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6460819359524700544, guid: d996788de322f4e0892660ceb0e5873f, type: 3}
+      propertyPath: viewModelBinding
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7826129341282400594, guid: d996788de322f4e0892660ceb0e5873f, type: 3}
       propertyPath: m_AnchorMax.y

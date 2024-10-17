@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66f9d27cbd754054ac8990bf20886851, type: 3}
   m_Name: SituationContext-OldOak
   m_EditorClassIdentifier: 
-  <Chance>k__BackingField: 0.5
+  <Chance>k__BackingField: 0.1
   <Description>k__BackingField: old oak
   <Choices>k__BackingField:
   - {fileID: 11400000, guid: b0ea3f048e5d44d68a59bb070d70701e, type: 2}

@@ -13,7 +13,7 @@ namespace Gameplay.StoryEngine.Core
     {
         private ISituationsResourcesProvider _resourcesProvider;
         private ISituationsResourceController _resourceController;
-        private IFactory<SituationObject, SituationModel> _situationModelFactory;
+        private SituationModel.Factory _situationModelFactory;
         private const string ASSET_TAG = "SE-Situation";
 
 

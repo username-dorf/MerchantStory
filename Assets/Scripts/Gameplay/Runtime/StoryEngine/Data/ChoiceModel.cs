@@ -1,5 +1,5 @@
+using System;
 using Gameplay.StoryEngine.Constructor;
-using UniRx;
 using Zenject;
 
 namespace Gameplay.StoryEngine
@@ -10,7 +10,7 @@ namespace Gameplay.StoryEngine
     }
     public sealed class ChoiceModel : IChoiceModel
     {
-        public ReactiveCommand Command { get; private set; }
+        public Action Command { get; private set; }
 
         public ChoiceModel(ChoiceObject choiceObject, ChoiceCommandStrategyFactory choiceCommandStrategyFactory)
         {
@@ -18,7 +18,7 @@ namespace Gameplay.StoryEngine
         }
         public void Execute()
         {
-            Command.Execute();
+            Command?.Invoke();
         }
         
         public class Factory : PlaceholderFactory<ChoiceObject,ChoiceModel>

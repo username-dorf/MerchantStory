@@ -68,5 +68,7 @@ namespace Core.AssetProvider
         /// <param name="progress"></param>
         /// <param name="cancellationToken"></param>
         UniTask LoadAssetsWithProgress(string addressablesTag, IProgress<float> progress, CancellationToken cancellationToken);
+
+        UniTask<IDisposable> ResolveRequest(IRequestAssets request, CancellationToken cancellationToken);
     }
 }

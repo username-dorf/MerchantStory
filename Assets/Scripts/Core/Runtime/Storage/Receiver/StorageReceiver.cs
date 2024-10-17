@@ -6,6 +6,7 @@ namespace Core.Storage
     public interface IStorageReceiver
     {
         void Receive(IItem item);
+        void Receive(IEnumerable<IItem> items);
     }
     
     public class StorageReceiver : IStorageReceiver
@@ -29,6 +30,14 @@ namespace Core.Storage
                     OnReceive.Execute(item);
                     return;
                 }
+            }
+        }
+
+        public void Receive(IEnumerable<IItem> items)
+        {
+            foreach (var item in items)
+            {
+                Receive(item);
             }
         }
     }

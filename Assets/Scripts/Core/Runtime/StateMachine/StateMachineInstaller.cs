@@ -23,8 +23,8 @@ namespace Core.StateMachine
                 .NonLazy();
 
             Container.Bind<IState>()
-                .WithId(nameof(LobbyState))
-                .To<LobbyState>()
+                .WithId(nameof(AdventureState))
+                .To<AdventureState>()
                 .AsSingle()
                 .NonLazy();
         }
