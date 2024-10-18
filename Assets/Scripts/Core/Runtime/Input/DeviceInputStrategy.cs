@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -12,12 +13,13 @@ namespace Core.Input
 
     public abstract class DeviceInputStrategy : IDeviceInputStrategy
     {
-        public InputAction InputAction { get; protected set; }
+        public List<InputAction> InputAction { get; protected set; }
         public ReactiveCommand<SwipeProgress> OnSwipeProgressChanged { get; }
         public ReactiveCommand<Direction> OnSwipeRegistered { get; }
 
         private UserInputSettingsProvider _settingsProvider;
 
+        protected Direction _lastDirection;
         protected Vector2 _startPosition;
         protected Vector2 _endPosition;
         protected bool _detected;
@@ -30,9 +32,9 @@ namespace Core.Input
         }
 
         public abstract void Initialize();
-        public abstract void OnInputPerformed(InputAction.CallbackContext context);
+        public abstract void OnSwipePerformed(InputAction.CallbackContext context);
 
-        public virtual void OnInputCanceled(InputAction.CallbackContext context)
+        public virtual void OnInputCompleted(InputAction.CallbackContext context)
         {
             
         }
@@ -44,10 +46,24 @@ namespace Core.Input
         protected void UpdateSwipeProgress(Vector2 currentPosition)
         {
             var swipeDelta = currentPosition - _startPosition;
+            var currentDirection = swipeDelta.x > 0 ? Direction.Right : Direction.Left;
+
+            if (_lastDirection != currentDirection && _lastDirection != Direction.None)
+            {
+                _startPosition = currentPosition;
+                swipeDelta = Vector2.zero;
+                OnSwipeProgressChanged.Execute(new SwipeProgress(currentDirection, 0f));
+                Debug.Log($"OnSwipeProgressChanged {currentDirection} {0}");
+            }
+
+            _lastDirection = currentDirection;
+
             var progress = Mathf.Clamp(swipeDelta.magnitude / _settingsProvider.SwipeThreshold, 0f, 1f);
-            var direction = swipeDelta.x > 0 ? Direction.Right : Direction.Left;
-            OnSwipeProgressChanged.Execute(new SwipeProgress(direction, progress));
+            OnSwipeProgressChanged.Execute(new SwipeProgress(currentDirection, progress));
+            Debug.Log($"OnSwipeProgressChanged {currentDirection} {progress}");
+
         }
+
         protected void DetectSwipe()
         {
             if (_detected)

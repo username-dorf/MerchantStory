@@ -74,14 +74,14 @@ namespace Core.Input
             {
                 foreach (var deviceInputStrategy in _deviceInputStrategies)
                 {
-                    deviceInputStrategy.InputAction.Enable();
+                    deviceInputStrategy.InputAction.ForEach(x=>x.Enable());
                 }
             }
             else
             {
                 foreach (var deviceInputStrategy in _deviceInputStrategies)
                 {
-                    deviceInputStrategy.InputAction.Disable();
+                    deviceInputStrategy.InputAction.ForEach(x => x.Dispose());
                 }
             }
         }

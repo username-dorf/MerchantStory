@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
@@ -12,23 +13,28 @@ namespace Core.Input
 
         public override void Initialize()
         {
-            InputAction = new InputAction("KeyboardSwipe", InputActionType.Button);
+            var inputAction = new InputAction("KeyboardSwipe", InputActionType.Button);
 
-            InputAction.AddBinding("<Keyboard>/a");
-            InputAction.AddBinding("<Keyboard>/d");
+            inputAction.AddBinding("<Keyboard>/a");
+            inputAction.AddBinding("<Keyboard>/d");
 
-            InputAction.started += OnInputStarted;
-            InputAction.performed += OnInputPerformed;
-            InputAction.canceled += OnInputCanceled;
+            inputAction.started += OnInputStarted;
+            inputAction.performed += OnSwipePerformed;
+            inputAction.canceled += OnInputCompleted;
+            
+            InputAction = new List<InputAction>()
+            {
+                inputAction
+            };
         }
 
         public override void OnInputStarted(InputAction.CallbackContext context)
         {
-            _detected = false;
+            _released = false;
             _startPosition = Vector2.zero;
         }
 
-        public override void OnInputPerformed(InputAction.CallbackContext context)
+        public override void OnSwipePerformed(InputAction.CallbackContext context)
         {
             if (context.control is KeyControl keyControl)
             {
@@ -51,14 +57,14 @@ namespace Core.Input
                 OnSwipeProgressChanged.Execute(new SwipeProgress(direction, progress));
 
                 _endPosition = Vector2.zero;
-                _detected = true;
+                _released = true;
 
                 OnSwipeRegistered.Execute(direction);
                 Debug.Log($"Keyboard Swipe {direction}");
             }
         }
 
-        public override void OnInputCanceled(InputAction.CallbackContext context)
+        public override void OnInputCompleted(InputAction.CallbackContext context)
         {
         }
     }
