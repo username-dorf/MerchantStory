@@ -1,29 +1,44 @@
 using Core.Input;
+using UniRx;
 using UnityEngine;
 
-public class SituationViewAnimation 
+public class UISituationViewAnimation 
 {
-    private const float HORIZONTAL_RADIUS = 100f; 
-    public float VERTICAL_RADIUS = 50f;
-    
-    private RectTransform _rectTransform;
-
-    public SituationViewAnimation(RectTransform rectTransform)
+    private Animator _animator;
+    public UISituationViewAnimation(Animator animator)
     {
-        _rectTransform = rectTransform;
+        _animator = animator;
     }
     
     public void DoSelectionDrag(float progress, Direction direction)
     {
-        Vector2 startPosition = _rectTransform.anchoredPosition;
+        UpdateAnimationProgress(progress);
+        ChangeAnimationDirection(progress, direction);
+    }
 
-        float xOffset = HORIZONTAL_RADIUS * Mathf.Cos(progress * Mathf.PI / 2);
-        float yOffset = VERTICAL_RADIUS * Mathf.Sin(progress * Mathf.PI / 2);
+    public void DoFlip(float progress)
+    {
+        _animator.Play("UISituationView_Idle",0, progress);
+        _animator.Play("UISituationView_Flip",1, progress);
+    }
+    
+    private void UpdateAnimationProgress(float progress)
+    {
+        _animator.speed = 0f;
+        AnimatorStateInfo state = _animator.GetCurrentAnimatorStateInfo(0);
+        _animator.Play(state.fullPathHash, 0, progress);
+    }
 
-        if (direction == Direction.Left)
+    private void ChangeAnimationDirection(float progress, Direction direction)
+    {
+        switch (direction)
         {
-            xOffset = -xOffset;
+            case Direction.Left:
+                _animator.Play("UISituationView_SelectLeft",0,progress);
+                break;
+            case Direction.Right:
+                _animator.Play("UISituationView_SelectRight",0,progress);
+                break;
         }
-        _rectTransform.anchoredPosition = startPosition + new Vector2(xOffset, -yOffset);
     }
 }

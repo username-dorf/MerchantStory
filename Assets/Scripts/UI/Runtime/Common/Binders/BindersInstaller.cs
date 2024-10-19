@@ -1,3 +1,4 @@
+using Core.Input;
 using MVVM;
 using UnityEngine;
 using Zenject;
@@ -14,6 +15,7 @@ namespace UI
             BinderFactory.RegisterBinder<ViewSetterBinder<bool>>();
             BinderFactory.RegisterBinder<ViewSetterBinder<string>>();
             BinderFactory.RegisterBinder<ViewSetterBinder<Vector3>>();
+            BinderFactory.RegisterBinder<ViewSetterBinder<SwipeProgress>>();
             //BinderFactory.RegisterBinder<ReactiveCollectionBinder<ProductView, ProductViewModel>>();
         }
     }

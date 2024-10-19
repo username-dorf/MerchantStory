@@ -22,7 +22,7 @@ namespace Core.Input
         protected Direction _lastDirection;
         protected Vector2 _startPosition;
         protected Vector2 _endPosition;
-        protected bool _detected;
+        protected bool _released;
         
         protected DeviceInputStrategy(UserInputSettingsProvider settingsProvider)
         {
@@ -43,6 +43,9 @@ namespace Core.Input
             
         }
         
+        private float _smoothedProgress = 0f;
+        private const float _smoothingFactor = 0.1f; // Adjust between 0 and 1
+
         protected void UpdateSwipeProgress(Vector2 currentPosition)
         {
             var swipeDelta = currentPosition - _startPosition;
@@ -52,21 +55,22 @@ namespace Core.Input
             {
                 _startPosition = currentPosition;
                 swipeDelta = Vector2.zero;
-                OnSwipeProgressChanged.Execute(new SwipeProgress(currentDirection, 0f));
-                Debug.Log($"OnSwipeProgressChanged {currentDirection} {0}");
+                _smoothedProgress = 0f;
+                OnSwipeProgressChanged.Execute(new SwipeProgress(currentDirection, _smoothedProgress));
+                Debug.Log($"OnSwipeProgressChanged {currentDirection} {_smoothedProgress}");
             }
 
             _lastDirection = currentDirection;
+            var rawProgress = Mathf.Clamp(swipeDelta.magnitude / _settingsProvider.SwipeThreshold, 0f, 1f);
+            _smoothedProgress = Mathf.Lerp(_smoothedProgress, rawProgress, _smoothingFactor);
 
-            var progress = Mathf.Clamp(swipeDelta.magnitude / _settingsProvider.SwipeThreshold, 0f, 1f);
-            OnSwipeProgressChanged.Execute(new SwipeProgress(currentDirection, progress));
-            Debug.Log($"OnSwipeProgressChanged {currentDirection} {progress}");
-
+            OnSwipeProgressChanged.Execute(new SwipeProgress(currentDirection, _smoothedProgress));
+            Debug.Log($"OnSwipeProgressChanged {currentDirection} {_smoothedProgress}");
         }
 
         protected void DetectSwipe()
         {
-            if (_detected)
+            if (_released)
                 return;
 
             var swipeDelta = _endPosition - _startPosition;
@@ -74,9 +78,9 @@ namespace Core.Input
                 Mathf.Abs(swipeDelta.x) > _settingsProvider.SwipeThreshold)
             {
                 var direction = swipeDelta.x > 0 ? Direction.Right : Direction.Left;
-                OnSwipeRegistered.Execute(direction);
-                Debug.Log($"Swipe {direction}");
-                _detected = true;
+                if(_smoothedProgress>0.9f)
+                    OnSwipeRegistered.Execute(direction);
+                _released = true;
             }
         }
     }
