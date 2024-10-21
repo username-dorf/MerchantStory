@@ -12,6 +12,7 @@ namespace Core.Input
         void SetListening(bool isListening);
 
         IObservable<Direction> OnSwipeRegistered { get; }
+        IObservable<Unit> OnSwipeCanceled { get; }
         IObservable<SwipeProgress> OnSwipeProgressChanged { get; }
     }
 
@@ -26,7 +27,17 @@ namespace Core.Input
                     .Merge();
             }
         }
-        
+
+        public IObservable<Unit> OnSwipeCanceled
+        {
+            get
+            {
+                return _deviceInputStrategies
+                    .Select(strategy => strategy.OnSwipeCanceled)
+                    .Merge();
+            }
+        }
+
         public IObservable<SwipeProgress> OnSwipeProgressChanged
         {
             get

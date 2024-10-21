@@ -1,29 +1,26 @@
 using Gameplay.StoryEngine;
-using UI.HUD;
-using UI.Runtime.Situation;
+using UI.SituationDisplay;
 using Zenject;
 
 namespace Gameplay.Modes.SearchMode
 {
     public class AdventureModeBootstrap : IInitializable
     {
-        private IHUDView _hudView;
-        private UISituationViewFactory _uiSituationViewFactory;
         private SituationQueueProcessor _situationQueueProcessor;
+        private UISituationController _uiSituationController;
 
         public AdventureModeBootstrap(
-            [Inject(Id = nameof(AdventureHUDView))] IHUDView hudView,
-            UISituationViewFactory uiSituationViewFactory,
+            UISituationController uiSituationController,
             SituationQueueProcessor situationQueueProcessor)
         {
+            _uiSituationController = uiSituationController;
             _situationQueueProcessor = situationQueueProcessor;
-            _uiSituationViewFactory = uiSituationViewFactory;
-            _hudView = hudView;
         }
         public async void Initialize()
         {
-            _uiSituationViewFactory.Create(_hudView.Body);
+            _uiSituationController.Initialize();
             await _situationQueueProcessor.CreateQueue(default);
+            _uiSituationController.Run();
             await _situationQueueProcessor.Run(default);
         }
     }

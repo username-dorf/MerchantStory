@@ -1,7 +1,7 @@
 using System;
 using Core.Utils;
 using Gameplay.StoryEngine.Constructor;
-using UI.Runtime.SituationDisplay;
+using UI.SituationDisplay;
 using UniRx;
 using UnityEngine;
 using Zenject;

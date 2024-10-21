@@ -3,7 +3,7 @@ using System.Threading;
 using Core.AssetProvider;
 using Core.SceneManager;
 using Cysharp.Threading.Tasks;
-using UI.Runtime.Situation;
+using UI.SituationDisplay;
 using UniRx;
 
 namespace Core.StateMachine

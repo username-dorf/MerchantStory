@@ -16,6 +16,7 @@ namespace Core.Input
         public List<InputAction> InputAction { get; protected set; }
         public ReactiveCommand<SwipeProgress> OnSwipeProgressChanged { get; }
         public ReactiveCommand<Direction> OnSwipeRegistered { get; }
+        public ReactiveCommand<Unit> OnSwipeCanceled { get; }
 
         private UserInputSettingsProvider _settingsProvider;
 
@@ -29,6 +30,7 @@ namespace Core.Input
             _settingsProvider = settingsProvider;
             OnSwipeProgressChanged = new ReactiveCommand<SwipeProgress>();
             OnSwipeRegistered = new ReactiveCommand<Direction>();
+            OnSwipeCanceled = new ReactiveCommand<Unit>();
         }
 
         public abstract void Initialize();
@@ -78,10 +80,18 @@ namespace Core.Input
                 Mathf.Abs(swipeDelta.x) > _settingsProvider.SwipeThreshold)
             {
                 var direction = swipeDelta.x > 0 ? Direction.Right : Direction.Left;
-                if(_smoothedProgress>0.9f)
+                if (_smoothedProgress > 0.9f)
+                {
                     OnSwipeRegistered.Execute(direction);
+                }
+                else
+                {
+                    OnSwipeCanceled.Execute(Unit.Default);
+
+                }
                 _released = true;
-            }
+            } 
+            
         }
     }
 }

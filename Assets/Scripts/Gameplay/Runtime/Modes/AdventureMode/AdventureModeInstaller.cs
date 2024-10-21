@@ -1,6 +1,6 @@
 using Gameplay.StoryEngine;
 using UI.HUD;
-using UI.Runtime.Situation;
+using UI.SituationDisplay;
 using UnityEngine;
 using Zenject;
 
@@ -12,15 +12,15 @@ namespace Gameplay.Modes.SearchMode
 
         public override void InstallBindings()
         {
-            StoryEngineInstaller.Install(Container);
-            Container.BindInterfacesTo<AdventureModeBootstrap>()
-                .AsSingle();
-
-            Container.Bind<UISituationViewFactory>()
-                .AsSingle();
-            
             Container.Bind<IHUDView>().WithId(nameof(AdventureHUDView)).FromInstance(hudView)
                 .AsCached();
+            StoryEngineInstaller.Install(Container);
+            UISituationViewPoolInstaller.Install(Container);
+            Container.BindInterfacesTo<AdventureModeBootstrap>()
+                .AsSingle();
+            Container.BindInterfacesAndSelfTo<UISituationController>()
+                .AsSingle();
+
         }
     }
 }

@@ -6,7 +6,7 @@ using Core.Utils;
 using Cysharp.Threading.Tasks;
 using Gameplay.StoryEngine.Constructor;
 using Gameplay.StoryEngine.Core;
-using UI.Runtime.SituationDisplay;
+using UI.SituationDisplay;
 
 namespace Gameplay.StoryEngine
 {

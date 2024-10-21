@@ -1,44 +1,52 @@
+using System;
 using Core.Input;
-using UniRx;
 using UnityEngine;
 
-public class UISituationViewAnimation 
+namespace UI.SituationDisplay
 {
-    private Animator _animator;
-    public UISituationViewAnimation(Animator animator)
+    public class UISituationViewAnimation 
     {
-        _animator = animator;
-    }
-    
-    public void DoSelectionDrag(float progress, Direction direction)
-    {
-        UpdateAnimationProgress(progress);
-        ChangeAnimationDirection(progress, direction);
-    }
-
-    public void DoFlip(float progress)
-    {
-        _animator.Play("UISituationView_Idle",0, progress);
-        _animator.Play("UISituationView_Flip",1, progress);
-    }
-    
-    private void UpdateAnimationProgress(float progress)
-    {
-        _animator.speed = 0f;
-        AnimatorStateInfo state = _animator.GetCurrentAnimatorStateInfo(0);
-        _animator.Play(state.fullPathHash, 0, progress);
-    }
-
-    private void ChangeAnimationDirection(float progress, Direction direction)
-    {
-        switch (direction)
+        private Animator _animator;
+        public UISituationViewAnimation(Animator animator)
         {
-            case Direction.Left:
-                _animator.Play("UISituationView_SelectLeft",0,progress);
-                break;
-            case Direction.Right:
-                _animator.Play("UISituationView_SelectRight",0,progress);
-                break;
+            _animator = animator;
         }
+    
+        public void DoSelectionDrag(float progress, Direction direction)
+        {
+            ChangeAnimationDirection(progress, direction);
+        }
+
+        public void DoFlip(float progress, Action callback = null)
+        {
+            PlayIdleAnimation(progress);
+            _animator.Play("UISituationView_Flip",1, progress);
+            if(Mathf.Approximately(progress, 1))
+                callback?.Invoke();
+        }
+        public void DoCancel(float progress)
+        {
+            PlayIdleAnimation(progress);
+            _animator.Play("UISituationView_Idle",1, progress);
+        }
+        
+        private void ChangeAnimationDirection(float progress, Direction direction)
+        {
+            switch (direction)
+            {
+                case Direction.Left:
+                    _animator.Play("UISituationView_SelectLeft",0,progress);
+                    break;
+                case Direction.Right:
+                    _animator.Play("UISituationView_SelectRight",0,progress);
+                    break;
+            }
+        }
+
+        private void PlayIdleAnimation(float progress)
+        {
+            _animator.Play("UISituationView_Idle",0, progress);
+        }
+        
     }
 }

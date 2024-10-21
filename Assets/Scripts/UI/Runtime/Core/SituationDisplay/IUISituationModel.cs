@@ -1,6 +1,6 @@
 using UniRx;
 
-namespace UI.Runtime.SituationDisplay
+namespace UI.SituationDisplay
 {
     public interface IUISituationModel
     {

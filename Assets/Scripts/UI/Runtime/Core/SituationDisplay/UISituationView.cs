@@ -2,29 +2,42 @@ using System;
 using System.Collections.Generic;
 using Core.AssetProvider;
 using Core.Input;
-using MVVM;
+using NaughtyAttributes;
 using TMPro;
-using UI.Runtime.SituationDisplay;
+using UI.HUD;
+using UI.ViewStateMachine;
 using UniRx;
 using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
-using Object = UnityEngine.Object;
 
-namespace UI.Runtime.Situation
+namespace UI.SituationDisplay
 {
     public class UISituationView : MonoBehaviour
     {
+        [SerializeField,ReadOnly] private UISituationState currentState;
         [SerializeField] private Animator animator;
+        [field: SerializeField] public Button CloseButton { get; private set; }
         
         public TMP_Text description;
         public TMP_Text choiceA;
         public TMP_Text choiceB;
         
         private UISituationViewAnimation _animation;
+        private ViewStateMachine.ViewStateMachine _stateMachine;
+        
+        private IViewState _hiddenState;
+        private IViewState _revealedState;
+        private IViewState _resultState;
+
         
         public void Initialize(UISituationViewModel viewModel)
         {
             _animation = new UISituationViewAnimation(animator);
+            _stateMachine = new ViewStateMachine.ViewStateMachine();
+            _hiddenState = new StateHidden(this);
+            _revealedState = new StateRevealed(this);
+            _resultState = new StateResult(this);
 
             viewModel.ChoiceADesc
                 .Subscribe(OnChoiceAChanged)
@@ -45,6 +58,34 @@ namespace UI.Runtime.Situation
             viewModel.SwipeProgress
                 .Subscribe(value=>OnSelectionValueChanged(value.Progress, value.Direction))
                 .AddTo(this);
+
+            viewModel.CancelProgress
+                .Subscribe(OnCancelValueChanged)
+                .AddTo(this);
+            
+            viewModel.CurrentState
+                .Subscribe(OnStateChanged)
+                .AddTo(this);
+
+            CloseButton.OnClickAsObservable()
+                .Subscribe(_=>viewModel.OnCloseButtonClick())
+                .AddTo(this);
+        }
+        private void OnStateChanged(UISituationState newState)
+        {
+            currentState = newState;
+            switch (newState)
+            {
+                case UISituationState.Hidden:
+                    _stateMachine.ChangeState(_hiddenState);
+                    break;
+                case UISituationState.Revealed:
+                    _stateMachine.ChangeState(_revealedState);
+                    break;
+                case UISituationState.Result:
+                    _stateMachine.ChangeState(_resultState);
+                    break;
+            }
         }
 
         private void OnChoiceAChanged(string value)
@@ -70,7 +111,77 @@ namespace UI.Runtime.Situation
         {
             _animation.DoSelectionDrag(progress, direction);
         }
+        private void OnCancelValueChanged(float progress)
+        {
+            _animation.DoCancel(progress);
+        }
         
+        private void Reinitialize()
+        {
+            _animation.DoCancel(1);
+        }
+        
+        private class StateHidden : IViewState
+        {
+            private readonly UISituationView _view;
+
+            public StateHidden(UISituationView view)
+            {
+                _view = view;
+            }
+            public void Enter()
+            {
+                _view.Reinitialize();
+                _view.transform.SetAsFirstSibling();
+                _view.CloseButton.interactable = false;
+            }
+
+            public void Exit()
+            {
+            }
+        }
+        
+        private class StateRevealed : IViewState
+        {
+            private readonly UISituationView _view;
+
+            public StateRevealed(UISituationView view)
+            {
+                _view = view;
+            }
+            public void Enter()
+            {
+                _view.transform.SetAsLastSibling();
+            }
+
+            public void Exit()
+            {
+            }
+        }
+        
+        private class StateResult : IViewState
+        {
+            private readonly UISituationView _view;
+
+            public StateResult(UISituationView view)
+            {
+                _view = view;
+            }
+            public void Enter()
+            {
+                _view.CloseButton.interactable = true;
+            }
+
+            public void Exit()
+            {
+            }
+        }
+    }
+    public enum UISituationState
+    {
+        Hidden,
+        Revealed,
+        Result
     }
 
     public class UISituationViewFactoryAssetRequest : IRequestAssets, IDisposable
@@ -90,27 +201,56 @@ namespace UI.Runtime.Situation
             UnityEngine.Pool.DictionaryPool<Type, string>.Release(_dictionary);
         }
     }
-    public class UISituationViewFactory 
+    
+    public class UISituationViewPool : MemoryPool<UISituationViewModel>
     {
-        private IAssetProvider _assetProvider;
+        private Dictionary<UISituationViewModel,UISituationView> _viewModelDictionary;
+
+        private IHUDView _hudView;
         private DiContainer _diContainer;
+        private IAssetProvider _assetProvider;
 
-        public UISituationViewFactory(DiContainer diContainer,IAssetProvider assetProvider)
+        public UISituationViewPool(DiContainer diContainer, IAssetProvider assetProvider,[Inject(Id = nameof(AdventureHUDView))] IHUDView hudView)
         {
-            _diContainer = diContainer;
+            _hudView = hudView;
             _assetProvider = assetProvider;
+            _diContainer = diContainer;
+            _viewModelDictionary = new Dictionary<UISituationViewModel,UISituationView>();
         }
-        
-        public UISituationView Create(Transform parent)
+        protected override void OnSpawned(UISituationViewModel viewModel)
         {
-            var asset = _assetProvider.GetAsset<UISituationView>(UISituationViewFactoryAssetRequest.ASSET_TAG);
-            var instance = _diContainer.InstantiatePrefabForComponent<UISituationView>(asset, parent);
-            var viewModel = _diContainer.Instantiate<UISituationViewModel>();
+            base.OnSpawned(viewModel);
+            var view = _diContainer.InstantiatePrefabForComponent<UISituationView>(
+                _assetProvider.GetAsset<UISituationView>(UISituationViewFactoryAssetRequest.ASSET_TAG), _hudView.Body);
             viewModel.Initialize();
-            instance.Initialize(viewModel);
-            return instance;
+            view.Initialize(viewModel);
+            viewModel.SetHiddenState();
+            _viewModelDictionary.Add(viewModel,view);
+        }
+        protected override void OnDespawned(UISituationViewModel viewModel)
+        {
+            base.OnDespawned(viewModel);
+            viewModel.SetHiddenState();
         }
 
-        
+        protected override void Reinitialize(UISituationViewModel viewModel)
+        {
+            base.Reinitialize(viewModel);
+            viewModel.SetHiddenState();
+        }
+    }
+
+    public class UISituationViewPoolInstaller : Installer<UISituationViewPoolInstaller>
+    {
+        [Inject(Id = nameof(AdventureHUDView))]
+        private IHUDView _hudView;
+        [Inject]
+        private IAssetProvider _assetProvider;
+
+        public override void InstallBindings()
+        {
+            Container.BindMemoryPool<UISituationViewModel, UISituationViewPool>()
+                .WithInitialSize(2);
+        }
     }
 }
