@@ -2,6 +2,7 @@ using System;
 using Core.Input;
 using PrimeTween;
 using UniRx;
+using UnityEngine;
 using Zenject;
 
 namespace UI.SituationDisplay
@@ -43,6 +44,9 @@ namespace UI.SituationDisplay
         {
             _inputListener.OnSwipeProgressChanged
                 .Subscribe(OnSwipeProgressChanged)
+                .AddTo(_disposable);
+            _inputListener.OnSwipeCanceled
+                .Subscribe(_ => OnSwipeCanceled())
                 .AddTo(_disposable);
             
             _inputListener.OnSwipeRegistered
@@ -100,6 +104,7 @@ namespace UI.SituationDisplay
         {
             if(CurrentState.Value is not UISituationState.Revealed)
                 return;
+            Debug.Log($"Swipe progress {progress.Progress} {progress.Direction}");
             SwipeProgress.Value = progress;
         }
         
@@ -109,6 +114,11 @@ namespace UI.SituationDisplay
             ChoiceADesc?.Dispose();
             ChoiceBDesc?.Dispose();
             _disposable?.Dispose();
+        }
+        
+        public class Factory : PlaceholderFactory<UISituationViewModel>
+        {
+            
         }
     }
 }

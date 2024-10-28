@@ -11,14 +11,17 @@ namespace UI.SituationDisplay
         private ReactiveProperty<int> _currentViewModelIndex;
 
         private CompositeDisposable _disposable;
-        private List<UISituationViewModel> _viewModels;
+        private Dictionary<UISituationViewModel,UISituationView> _viewModels;
+        
         private UISituationViewPool _uiSituationViewPool;
+        private UISituationViewModel.Factory _viewModelFactory;
 
-        public UISituationController(UISituationViewPool uiSituationViewPool)
+        public UISituationController(UISituationViewPool uiSituationViewPool,UISituationViewModel.Factory viewModelFactory)
         {
+            _viewModelFactory = viewModelFactory;
             _uiSituationViewPool = uiSituationViewPool;
             _currentViewModelIndex = new ReactiveProperty<int>(0);
-            _viewModels = new List<UISituationViewModel>();
+            _viewModels = new Dictionary<UISituationViewModel,UISituationView>();
             _disposable = new CompositeDisposable();
         }
 
@@ -26,12 +29,17 @@ namespace UI.SituationDisplay
         {
             for (int i = 0; i < INITIAL_VIEW_COUNT; i++)
             {
-                var viewModel = _uiSituationViewPool.Spawn();
-                _viewModels.Add(viewModel);
+                var view = _uiSituationViewPool.Spawn();
+                var viewModel = _viewModelFactory.Create();
+                view.Initialize(viewModel);
+                viewModel.Initialize();
+                viewModel.SetHiddenState();
                 
                 viewModel.OnViewClosed
                     .Subscribe(OnViewClosed)
                     .AddTo(_disposable);
+                
+                _viewModels.Add(viewModel,view);
             }
         }
 
@@ -40,7 +48,7 @@ namespace UI.SituationDisplay
             var i = _currentViewModelIndex.Value;
             if(index>=0)
                 i = index;
-            _viewModels[i].SetRevealedState();
+            _viewModels.ElementAt(i).Key.SetRevealedState();
         }
         
         private void OnViewClosed(UISituationViewModel viewModel)

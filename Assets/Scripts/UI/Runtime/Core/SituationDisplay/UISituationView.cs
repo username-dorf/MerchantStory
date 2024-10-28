@@ -202,41 +202,20 @@ namespace UI.SituationDisplay
         }
     }
     
-    public class UISituationViewPool : MemoryPool<UISituationViewModel>
+    public class UISituationViewPool : MemoryPool<UISituationView>
     {
-        private Dictionary<UISituationViewModel,UISituationView> _viewModelDictionary;
-
-        private IHUDView _hudView;
-        private DiContainer _diContainer;
-        private IAssetProvider _assetProvider;
-
-        public UISituationViewPool(DiContainer diContainer, IAssetProvider assetProvider,[Inject(Id = nameof(AdventureHUDView))] IHUDView hudView)
+        protected override void OnSpawned(UISituationView view)
         {
-            _hudView = hudView;
-            _assetProvider = assetProvider;
-            _diContainer = diContainer;
-            _viewModelDictionary = new Dictionary<UISituationViewModel,UISituationView>();
+            base.OnSpawned(view);
         }
-        protected override void OnSpawned(UISituationViewModel viewModel)
+        protected override void OnDespawned(UISituationView view)
         {
-            base.OnSpawned(viewModel);
-            var view = _diContainer.InstantiatePrefabForComponent<UISituationView>(
-                _assetProvider.GetAsset<UISituationView>(UISituationViewFactoryAssetRequest.ASSET_TAG), _hudView.Body);
-            viewModel.Initialize();
-            view.Initialize(viewModel);
-            viewModel.SetHiddenState();
-            _viewModelDictionary.Add(viewModel,view);
-        }
-        protected override void OnDespawned(UISituationViewModel viewModel)
-        {
-            base.OnDespawned(viewModel);
-            viewModel.SetHiddenState();
+            base.OnDespawned(view);
         }
 
-        protected override void Reinitialize(UISituationViewModel viewModel)
+        protected override void Reinitialize(UISituationView view)
         {
-            base.Reinitialize(viewModel);
-            viewModel.SetHiddenState();
+            base.Reinitialize(view);
         }
     }
 
@@ -249,8 +228,10 @@ namespace UI.SituationDisplay
 
         public override void InstallBindings()
         {
-            Container.BindMemoryPool<UISituationViewModel, UISituationViewPool>()
-                .WithInitialSize(2);
+            Container.BindMemoryPool<UISituationView, UISituationViewPool>()
+                .WithInitialSize(2)
+                .FromComponentInNewPrefab(_assetProvider.GetAsset<UISituationView>(UISituationViewFactoryAssetRequest.ASSET_TAG))
+                .UnderTransform(_hudView.Body);
         }
     }
 }

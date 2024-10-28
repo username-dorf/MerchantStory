@@ -36,9 +36,11 @@ namespace UI.SituationDisplay
             {
                 case Direction.Left:
                     _animator.Play("UISituationView_SelectLeft",0,progress);
+                    _animator.speed = 0;
                     break;
                 case Direction.Right:
                     _animator.Play("UISituationView_SelectRight",0,progress);
+                    _animator.speed = 0;
                     break;
             }
         }

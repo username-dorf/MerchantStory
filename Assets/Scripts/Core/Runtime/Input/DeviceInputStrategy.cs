@@ -80,17 +80,13 @@ namespace Core.Input
                 Mathf.Abs(swipeDelta.x) > _settingsProvider.SwipeThreshold)
             {
                 var direction = swipeDelta.x > 0 ? Direction.Right : Direction.Left;
-                if (_smoothedProgress > 0.9f)
-                {
-                    OnSwipeRegistered.Execute(direction);
-                }
-                else
-                {
-                    OnSwipeCanceled.Execute(Unit.Default);
-
-                }
+                OnSwipeRegistered.Execute(direction);
                 _released = true;
-            } 
+            }
+            else
+            {
+                OnSwipeCanceled.Execute(Unit.Default);
+            }
             
         }
     }

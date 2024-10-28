@@ -22,7 +22,6 @@ namespace Core
             StateMachineInstaller.Install(Container);
             AssetProviderInstaller.Install(Container);
             StorageInstaller.Install(Container);
-            UIInstaller.Install(Container);
             
             BindBootstrap(Container);
         }
